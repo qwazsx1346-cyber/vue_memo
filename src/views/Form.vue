@@ -2,7 +2,6 @@
 import { reactive, onMounted } from 'vue';
 import storageService from '@/services/StorageService';
 import { useRoute, useRouter } from 'vue-router';
-
 const router = useRouter(); //라우터 객체 주소값 얻기(주소값 이동)
 const route = useRoute(); //라우트 객체 주소값 얻기(PathVariable 값 가져오기)
 
@@ -21,6 +20,15 @@ const submit = () => {
         path: '/'
     });
 }
+
+const update = () => {
+  storageService.addItem(state.memo);
+    alert('수정되었습니다.');
+    router.push({
+        path: '/'
+    });
+}
+
 
 onMounted(() => {
     if(route.params.id) { //index.js파일에 18번라인에 :id로 썻기때문에 .id로 받는것임
@@ -41,8 +49,15 @@ onMounted(() => {
       <label for="content" class="form-label">내용</label>
       <textarea id="content" v-model="state.memo.content"></textarea>
   </div>
-  <button class="btn btn-primary w-100 py-3">저장</button>
+  <button class="btn btn-primary w-30 py-3 me-2">저장</button>
+  <button type="button" @click="update" class="btn btn-warning w-30 py-3">수정</button>
 </form>
+
+
+<!-- <form class="detail" @submit.prevent="modify">
+    <button class="btn btn-danger w-30 py-3">삭제</button>
+</form> -->
+
 </template>
 
 <style scoped>
