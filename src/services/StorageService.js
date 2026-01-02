@@ -5,26 +5,52 @@
   붕어빵틀 vs 붕어빵
 */
 
-
+//은닉화, 캡슐화
 export class StorageService {
+    //전역 변수는 객체가 살아있는 동안 데이터가 유지된다.
     #storageName; //전역변수(속성), #이 붙으면 private(비공개) 외부에서 접근할 수 없는 속성
-                   // storageName속성에 값 하나를 넣을 수 있는 객체를 만들 수 있다.
+    #lastId;      // storageName속성에 값 하나를 넣을 수 있는 객체를 만들 수 있다.
     //생성자, 객체를 생성하려면 꼭 생성자를 호출해야 합니다.
     //메소드지만 특별하다. 객체 생성할 때만 호출할 수 있다.
-    constructor(stprageName) { //파라미터, 객체 생성 때 외부에서 값이 들어온다.
+    constructor(storageName) { //파라미터, 객체 생성 때 외부에서 값이 들어온다.
         if(!storageName) {
           throw new Error('스토리지 이름을 입력해주세요.');
         }
         this.#storageName = storageName;
+        this.#lastId = 1;
     }
 
-    //특정 항목 조회
+    // 스토리지 데이터 조회 p.161
+    #getStorageData() {
+        const json = lacalStorage.getItem(this.#storageName);
+        if(json) { return JSON.parse(json); } //문자열을 객체로 변환 후 리턴
+        return {}; //빈 객체 리턴
+    }
+
+    // 스토리지 데이터 저장 p.161
+    #saveStorageData(data) {
+      const json = JSON.stringify(data); //객체(data)를 json문자열(value)로 변환
+      localStorage.setItem(this.#storageName, json); //value를 localStorage에 저장
+    }
+
+    // 신규 항목 추가 p.162
+    addItem(item) {
+        const storageData = this.#getStorageData();
+        item.id = this.#lastId;
+        storageData[this.#lastId++] = item;
+        this.#saveStorageData(storageData);
+    }
+
+    // 전체 항목 조회 p.163
+    getItems() {
+        return this.#getStorageData();
+    }
+
     getItem(id) {
-        const json  = localStorage.getItem(this.#storageName);
-        if(json) {
-          const jsonData = JSON.parse (json);
-          return jsonData.item.find(item => item.id === id);
-        }
-        return undefined;
+        // return this.#getStorageData()[id];
+
+        // 위 내용을 풀어쓰면 아래와 같이 됨
+        const storageData = this.#getStorageData();
+        return storageData[id]; //객체가 리턴된다.
     }
 }
