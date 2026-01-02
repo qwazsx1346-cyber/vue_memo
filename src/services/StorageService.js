@@ -6,7 +6,7 @@
 */
 
 //은닉화, 캡슐화
-export class StorageService {
+class StorageService {
     //전역 변수는 객체가 살아있는 동안 데이터가 유지된다.
     #storageName; //전역변수(속성), #이 붙으면 private(비공개) 외부에서 접근할 수 없는 속성
     #lastId;      // storageName속성에 값 하나를 넣을 수 있는 객체를 만들 수 있다.
@@ -22,7 +22,7 @@ export class StorageService {
 
     // 스토리지 데이터 조회 p.161
     #getStorageData() {
-        const json = lacalStorage.getItem(this.#storageName);
+        const json = localStorage.getItem(this.#storageName);
         if(json) { return JSON.parse(json); } //문자열을 객체로 변환 후 리턴
         return {}; //빈 객체 리턴
     }
@@ -54,3 +54,6 @@ export class StorageService {
         return storageData[id]; //객체가 리턴된다.
     }
 }
+
+const storageService = new StorageService('myMemo');
+export default storageService;
