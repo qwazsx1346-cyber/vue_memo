@@ -5,7 +5,7 @@ import router from './router';
 </script>
 
 <template>
-<div class="app">
+<div class="container">
     <!-- 부트스트랩은 container 클래스가 부모 역할
         py-4: padding-top, padding-bottom: 4는 아마도 12px
     -->
