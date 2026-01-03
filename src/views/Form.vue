@@ -12,6 +12,7 @@ const state = reactive({
     content: ''
   }
 });
+
 const submit = () => {
     storageService.addItem(state.memo);
     alert('저장하였습니다.');
@@ -22,7 +23,9 @@ const submit = () => {
 }
 
 const update = () => {
-  storageService.addItem(state.memo);
+  storageService.setItem({...state.memo}); // ...은 전개연산자(Spread Operator)로 state.memo 객체를
+                                          //복사해서 새로운 객체를 만들라는 뜻
+                                          //그래야 내용 수정 중 데이터가 망가지지않고 안전하게 저장됨
     alert('수정되었습니다.');
     router.push({
         path: '/'

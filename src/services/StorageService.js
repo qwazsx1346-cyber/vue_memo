@@ -20,11 +20,11 @@ class StorageService {
 
     // 스토리지 데이터 조회 p.161
     #getStorageData() {
-        const json = localStorage.getItem(this.#storageName);
-        if(json) { return JSON.parse(json); } //json문자열을 객체로 변환 후 리턴
+        const json = localStorage.getItem(this.#storageName); //스토리지 이름을 키로 사용해 데이터를 조회
+        if(json) { return JSON.parse(json); } //JSON 데이터가 있으면 파싱해서 json문자열을 객체로 변환 후 리턴
         return {
-            data: {},
-            lastId: 1
+            data: {}, //사용자가 입력한 메모 데이터를 담는 배열
+            lastId: 1 //새로운 항목을 추가할 때 사용하는 아이디
         }; //빈 객체 리턴
     }
 
@@ -49,12 +49,25 @@ class StorageService {
         return this.#getStorageData().data;
     }
     
+    //특정 항목 조회
     getItem(id) {
         //return this.#getStorageData()[id];
         const storageData = this.#getStorageData();
         return storageData.data[id]; //item객체가 리턴된다. 
     }
 
+    //특정 항목 수정
+    setItem(item) {
+        const storageData = this.#getStorageData();
+
+       if (!item.id || !storageData.data[item.id]) {
+        throw new Error('수정할 데이터가 존재하지 않습니다.');
+       }
+       storageData.data[item.id] = item;
+       this.#saveStorageData(storageData);
+    }
+    
+    //특정 항목 삭제
     delItem(id) { //특정한 메모글을 삭제하기 위해 id값을 파라미터로 받는다.
         const storageData = this.#getStorageData();
         delete storageData.data[id];
