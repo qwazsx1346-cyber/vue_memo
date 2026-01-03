@@ -13,8 +13,16 @@ const state = reactive({
   }
 });
 
+const resetMemo = () => {
+  state.memo = {
+      title: '',
+      content: ''
+  };
+};
+
 const submit = () => {
-    storageService.addItem(state.memo);
+    storageService.addItem({...state.memo});
+    resetMemo();
     alert('저장하였습니다.');
     //라우팅 처리 (path: '/')로 주소값 이동 (화면 전환)
     router.push({
@@ -38,8 +46,8 @@ onMounted(() => {
                           // 만약 :ggg로 받으면 .ggg로 받으면 됨
         const id = Number(route.params.id); //route와 params는 세트(약속)임. 파라미터를 뜻함
         state.memo = storageService.getItem(id);
-    }
-})
+    } else { resetMemo() };
+});
 </script>
 
 <template>
