@@ -8,7 +8,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: Home, //() => import('../views/Home.vue')
     },
     {
       path: '/memos/add',
