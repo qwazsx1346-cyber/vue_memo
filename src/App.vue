@@ -13,7 +13,7 @@
                 <b class="fs-4">Memo Application</b>
             </router-link>
         </header>
-
+        
         <main>
             <router-view />
         </main>

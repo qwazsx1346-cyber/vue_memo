@@ -21,24 +21,31 @@ class StorageService {
     // 스토리지 데이터 조회 p.161
     #getStorageData() {
         const json = localStorage.getItem(this.#storageName); //스토리지 이름을 키로 사용해 데이터를 조회
-        if(json) { return JSON.parse(json); } //JSON 데이터가 있으면 파싱해서 json문자열을 객체로 변환 후 리턴
+        if(json) { return JSON.parse(json); } //JSON 데이터가 있으면 파싱해서 json문자열을 객체로 변환 후 리턴(역직렬화)
         return {
             data: {}, //사용자가 입력한 메모 데이터를 담는 배열, 대괄호 []를 사용하면 for문을 돌아 값을 찾기때문에
                         // 성능적으로 떨어짐. 중괄호{}를 사용하여 id값을 바로 찾아냄으로서 성능적으로 월등
             lastId: 1 //새로운 항목을 추가할 때 사용하는 아이디
-        }; //빈 객체 리턴
+        }; //초기화 객체 리턴
     }
 
     // 스토리지 데이터 저장 p.161
     #saveStorageData(data) {
-        const json = JSON.stringify(data); //객체(data)를 json문자열(value)로 변환 
+        const json = JSON.stringify(data); //객체(data)를 json문자열(value)로 변환 (직렬화)
         localStorage.setItem(this.#storageName, json); //value를 localStorage에 저장
-    }
+    }                       // 위에 this는 상수. 나 자신의 값을 담고있음, super는 내 직속부모의 값
 
     // 신규 항목 추가 p.162
     addItem(item) {
         console.log(item);
         // item = { title: '1', content: '1 내용' }
+        /*
+            data: {
+                '1': { id: 1, title: '1', content: '1 내용' },
+                '2': { id: 2, title: '어쩌고저쩌고', content: '저쩌고저쩌고' },
+            },
+            lastId: 3
+        */
         const storageData = this.#getStorageData(); //기존에 저장된 데이터 가져와(최초 빈 객체가 넘어온다.) {}
         item.id = storageData.lastId; // item = { id: 1, title: '1', content: '1 내용' }
         storageData.data[storageData.lastId++] = item; //{}  >>  { '1': { id: 1, title: '1', content: '1 내용' } }
@@ -47,7 +54,10 @@ class StorageService {
 
     // 전체 항목 조회
     getItems() {
-        return this.#getStorageData().data;
+        const savedData = this.#getStorageData();
+        return savedData.data;
+       //return this.#getStorageData().data; 
+       //체이닝 기법이어서 const로 선언을 따로 해주지 않아도 됨
     }
     
     //특정 항목 조회
@@ -60,11 +70,7 @@ class StorageService {
     //특정 항목 수정
     setItem(item) {
         const storageData = this.#getStorageData();
-
-        if (!item.id || !storageData.data[item.id]) {
-        throw new Error('수정할 데이터가 존재하지 않습니다.');
-        }
-        storageData.data[item.id] = item;
+        storageData.data[item.id] = item; //똑같은 속성에 저장하면 된다.
         this.#saveStorageData(storageData);
     }
     
