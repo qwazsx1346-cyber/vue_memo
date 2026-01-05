@@ -3,6 +3,7 @@ import { reactive, onMounted } from 'vue';
 import storageService from '@/services/StorageService';
 import { useRoute, useRouter } from 'vue-router';
 const router = useRouter(); //라우터 객체 주소값 얻기(주소값 이동)
+//라우터 얻는법은 import하고 함수로 호출하면 사용가능
 const route = useRoute(); //라우트 객체 주소값 얻기(PathVariable 값 가져오기)
 
 
@@ -42,6 +43,7 @@ const update = () => {
 
 
 onMounted(() => {
+    console.log('route.params.id:', route.params.id);
     if(route.params.id) { //index.js파일에 18번라인에 :id로 썻기때문에 .id로 받는것임
                           // 만약 :ggg로 받으면 .ggg로 받으면 됨
         const id = Number(route.params.id); //route와 params는 세트(약속)임. 파라미터를 뜻함

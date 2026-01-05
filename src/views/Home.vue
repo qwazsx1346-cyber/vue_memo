@@ -10,11 +10,11 @@ const state = reactive ( {
 onMounted( ()=> state.memo = storageService.getItems() ); 
 const remove = id => {
   console.log('id:', id);
-  if(!confirm('삭제하시겠습니까?')) {
+  if(!confirm('삭제하시겠습니까?')) { //confirm은 리턴 메소드, if ()안에 있는 타입은 불린(bloone)타입
       return;
   }
   storageService.delItem(id);
-  state.memo = storageService.getItems();
+  state.memo = storageService.getItems(); //이 방법은 하나를 지우고 나머지데이터를 다시 다 그린다. 성능적으로 좋지는 않음.
 }
 
 </script>
@@ -31,7 +31,7 @@ const remove = id => {
               <div class="d-flex justify-content-between">
                 <b>{{ item.title }}</b>
                 <div>
-                  <!-- click.prevent는 클릭이벤트 버블링 막는거다.-->
+                  <!-- click.prevent는 클릭이벤트 버블링 막는거다. prevent가 없다면 위24번라인에 :to부분도 실행이 됨-->
                   <span role="button" @click.prevent="remove(item.id)">삭제</span>
                 </div>
               </div>

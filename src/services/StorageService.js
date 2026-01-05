@@ -23,7 +23,8 @@ class StorageService {
         const json = localStorage.getItem(this.#storageName); //스토리지 이름을 키로 사용해 데이터를 조회
         if(json) { return JSON.parse(json); } //JSON 데이터가 있으면 파싱해서 json문자열을 객체로 변환 후 리턴
         return {
-            data: {}, //사용자가 입력한 메모 데이터를 담는 배열
+            data: {}, //사용자가 입력한 메모 데이터를 담는 배열, 대괄호 []를 사용하면 for문을 돌아 값을 찾기때문에
+                        // 성능적으로 떨어짐. 중괄호{}를 사용하여 id값을 바로 찾아냄으로서 성능적으로 월등
             lastId: 1 //새로운 항목을 추가할 때 사용하는 아이디
         }; //빈 객체 리턴
     }
@@ -60,11 +61,11 @@ class StorageService {
     setItem(item) {
         const storageData = this.#getStorageData();
 
-       if (!item.id || !storageData.data[item.id]) {
+        if (!item.id || !storageData.data[item.id]) {
         throw new Error('수정할 데이터가 존재하지 않습니다.');
-       }
-       storageData.data[item.id] = item;
-       this.#saveStorageData(storageData);
+        }
+        storageData.data[item.id] = item;
+        this.#saveStorageData(storageData);
     }
     
     //특정 항목 삭제
